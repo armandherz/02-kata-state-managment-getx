@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:state_managment_getx_practice/src/stateControllers/settings_getx.dart';
 import 'package:state_managment_getx_practice/src/themes/my_themes.dart';
 
 class SettingsPage extends StatelessWidget {
+  final settinsCtrl = Get.put(SettingsGetx(), permanent: true);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +27,11 @@ class SettingsPage extends StatelessWidget {
                         "Nombre",
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      TextField(),
+                      TextField(
+                        onChanged: (t) {
+                          settinsCtrl.setName = t;
+                        },
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -38,7 +44,11 @@ class SettingsPage extends StatelessWidget {
                         "Apellido",
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      TextField(),
+                      TextField(
+                        onSubmitted: (t) {
+                          settinsCtrl.setLastName = t;
+                        },
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -49,9 +59,11 @@ class SettingsPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Nombre: ",
-                          style: Theme.of(context).textTheme.headline6,
+                        Obx(
+                          () => Text(
+                            "Nombre: ${settinsCtrl.name}",
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       ],
                     ),
@@ -64,10 +76,12 @@ class SettingsPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Apellido: ",
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
+                        Obx(
+                          () => Text(
+                            "Apellido: ${settinsCtrl.lastName}",
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -91,7 +105,10 @@ class SettingsPage extends StatelessWidget {
                           ],
                           isSelected: [true],
                           onPressed: (index) {
-                            Get.changeTheme(MyThemes().light());
+                            settinsCtrl.setTheme = !settinsCtrl.theme;
+                            Get.changeThemeMode(settinsCtrl.theme
+                                ? ThemeMode.dark
+                                : ThemeMode.light);
                           },
                           selectedColor: Colors.green,
                           color: Colors.red,
